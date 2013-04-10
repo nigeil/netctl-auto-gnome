@@ -1,0 +1,10 @@
+{
+  "description": "For people preferring Netcfg, this plugin display a network status icon in the status area, similar to that of Network Manager.",
+  "name": "Netcfg Menu",
+  "shell-version": [
+    "3.8"
+  ],
+  "url": "",
+  "uuid": "netcfg@tjaart.tjaart.co.za",
+  "version": 1
+}
