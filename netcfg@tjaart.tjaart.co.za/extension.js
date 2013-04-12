@@ -11,16 +11,16 @@ const NETWORK_OFFLINE = "network-offline-symbolic";
 let indicator;
 let event=null;
 
-function NetworkStatus() {
+function Netctl() {
     this._init.apply(this, arguments);
 }
 
- NetworkStatus.prototype = {
+ Netctl.prototype = {
      __proto__: PanelMenu.SystemStatusButton.prototype,
 
      _init: function(){
        this._refresh_details();
-       PanelMenu.SystemStatusButton.prototype._init.call(this, 'networkstatus');
+       PanelMenu.SystemStatusButton.prototype._init.call(this, 'netctl');
      },
 
      _get_network_profiles: function() {
@@ -46,14 +46,10 @@ function NetworkStatus() {
        try {
 	 let stdin = "";
 	 let [result, argv] = GLib.shell_parse_argv(command);
-	 let res = GLib.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, this._stdout, this._stdout, this._stdout);
+	 let res = GLib.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, null, null);
        } catch (e) {
 	 global.logError(e);
        }
-     },
-
-     _stdout: function() {
-       global.log("sucess")
      },
 
      _update_popup: function() {
@@ -61,18 +57,14 @@ function NetworkStatus() {
 
 	var profiles = this._get_network_profiles();
 	for(let i = 0; i < profiles.length; i++){
-	   if(! profiles[i].match(/\*.*/g)) {
-	     this._add_menu_item(profiles[i]);
-	   }else {
-	     this.menu.addMenuItem(new PopupMenu.PopupMenuItem(profiles[i],  { reactive: false }));
-	   }
+	  this._add_profile_menu_item(profiles[i]);
 	}
 	this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-	this._add_stop_all();
+	this._add_stop_all_menu_item();
 
      },
 
-     _add_stop_all: function() {
+     _add_stop_all_menu_item: function() {
 	  let menuItem = new PopupMenu.PopupMenuItem("stop-all");
 	  this.menu.addMenuItem(menuItem);
 
@@ -81,13 +73,17 @@ function NetworkStatus() {
 	  }));
      },
 
-     _add_menu_item: function(profile) {
+     _add_profile_menu_item: function(profile) {
+       // The the profile is not active, add a click action to switch to it.
+       if(! profile.match(/\*.*/g)) {
 	  let menuItem = new PopupMenu.PopupMenuItem(profile);
 	  this.menu.addMenuItem(menuItem);
-
 	  menuItem.connect('activate', Lang.bind(this, function() {
 	    this._switch_to_profile(profile);
 	  }));
+       }else {
+	 this.menu.addMenuItem(new PopupMenu.PopupMenuItem(profiles[i],  { reactive: false }));
+       }
      },
 
      _set_icon: function(){
@@ -120,8 +116,8 @@ function init() {
 }
 
 function enable() {
-  indicator = new NetworkStatus();
-  Main.panel.addToStatusArea('networkstatus', indicator);
+  indicator = new Netctl();
+  Main.panel.addToStatusArea('netctl', indicator);
   indicator._get_connected_networks();
 }
 

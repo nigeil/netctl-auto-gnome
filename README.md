@@ -12,14 +12,14 @@ Currently the extension only does 3 things
 
 **NB!** This plugin does not do any netctl configuration, that must be done from the command line.
 
-
-![network enabled](https://github.com/tjaartvdwalt/netcfg-gnome-shell-extension/blob/master/screenshots/network-enabled.png?raw=true)
-
+** Network Disabled **
 ![network disabled](https://github.com/tjaartvdwalt/netcfg-gnome-shell-extension/blob/master/screenshots/network-disabled.png?raw=true)
+** Network Enabled **
+![network enabled](https://github.com/tjaartvdwalt/netcfg-gnome-shell-extension/blob/master/screenshots/network-enabled.png?raw=true)
 
 ## Dependencies ##
 * netctl (obviously)
-* gksu
+* gksudo
 
 ## Known issues ##
 * If you are using netctl-auto, the plugin does not show your active profile. I logged a bug [here](https://github.com/joukewitteveen/netctl/issues/23) for the netctl developers.
