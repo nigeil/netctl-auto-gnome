@@ -12,10 +12,10 @@ Currently the extension only does 3 things
 
 **NB!** This plugin does not do any netctl configuration, that must be done from the command line.
 
-** Network Disabled **
-![network disabled](https://github.com/tjaartvdwalt/netcfg-gnome-shell-extension/blob/master/screenshots/network-disabled.png?raw=true)
-** Network Enabled **
-![network enabled](https://github.com/tjaartvdwalt/netcfg-gnome-shell-extension/blob/master/screenshots/network-enabled.png?raw=true)
+**Network Disabled**
+![network disabled](https://github.com/tjaartvdwalt/netctl-gnome-shell-extension/blob/master/screenshots/network-disabled.png?raw=true)
+**Network Enabled**
+![network enabled](https://github.com/tjaartvdwalt/netctl-gnome-shell-extension/blob/master/screenshots/network-enabled.png?raw=true)
 
 ## Dependencies ##
 * netctl (obviously)
