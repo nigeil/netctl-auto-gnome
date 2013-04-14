@@ -1,0 +1,10 @@
+{
+  "description": "For people preferring Netctl, this plugin display a network status icon in the status area, similar to that of Network Manager.",
+  "name": "Netctl Menu",
+  "shell-version": [
+    "3.8"
+  ],
+  "url": "",
+  "uuid": "netctl@tjaart.tjaart.co.za",
+  "version": 1
+}
