@@ -12,15 +12,17 @@ Currently the extension only does 3 things
 
 **NB!** This plugin does not do any netctl configuration, that must be done from the command line.
 
-**Network Disabled**
+**No active profile**
+
 ![network disabled](https://github.com/tjaartvdwalt/netctl-gnome-shell-extension/blob/master/screenshots/network-disabled.png?raw=true)
-**Network Enabled**
+**Profile activated**
+
 ![network enabled](https://github.com/tjaartvdwalt/netctl-gnome-shell-extension/blob/master/screenshots/network-enabled.png?raw=true)
 
 ## Dependencies ##
 * netctl (obviously)
-* gksudo
+* gksudo (with sudo access for the logged in user)
 
 ## Known issues ##
-* If you are using netctl-auto, the plugin does not show your active profile. I logged a bug [here](https://github.com/joukewitteveen/netctl/issues/23) for the netctl developers.
-* Need better feedback when switching profiles. E.g: If you switch profile and the new profile fails to connect.
+* netctl-auto is not supported.
+* Need feedback when switching profiles fails.
