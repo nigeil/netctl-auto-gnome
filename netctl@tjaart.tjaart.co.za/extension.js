@@ -1,5 +1,5 @@
 /*
- * Netctl Menu is a Gnome 3 extension to allow you to  switch between netctl
+ * Netctl Menu is a Gnome 3 extension that allows you to  switch between netctl
  * profiles using a menu in the notification area.
  *
  * Copyright (C) 2013  Tjaart van der Walt
@@ -38,120 +38,120 @@ function Netctl() {
     this._init.apply(this, arguments);
 }
 
- Netctl.prototype = {
-     __proto__: PanelMenu.SystemStatusButton.prototype,
+Netctl.prototype = {
+    __proto__: PanelMenu.SystemStatusButton.prototype,
 
-     _init: function(){
-       PanelMenu.SystemStatusButton.prototype._init.call(this, 'netctl');
-       // We include the set_icon() and update_menu() becaust otherwise the
-       // icon will only appear after the timeout on refresh_details have passed
-       this._set_icon();
-       this._update_menu();
-       // Will keep on updating the status area icon and updating the menu every x seconds
-       this._refresh_details();
-     },
+    _init: function(){
+        PanelMenu.SystemStatusButton.prototype._init.call(this, 'netctl');
+        // We include the set_icon() and update_menu() becaust otherwise the
+        // icon will only appear after the timeout on refresh_details have passed
+        this._set_icon();
+        this._update_menu();
+        // Will keep on updating the status area icon and updating the menu every x seconds
+        this._refresh_details();
+    },
 
-     _get_network_profiles: function() {
-       var profileString = GLib.spawn_command_line_sync("netctl list")[1].toString();
-       var profileArray = profileString.split("\n")
-       return profileArray.splice(0, profileArray.length - 1)
-     },
+    _get_network_profiles: function() {
+        var profileString = GLib.spawn_command_line_sync("netctl list")[1].toString();
+        var profileArray = profileString.split("\n")
+        return profileArray.splice(0, profileArray.length - 1)
+    },
 
-     _get_connected_networks: function() {
-       let networks =  GLib.spawn_command_line_sync("netctl list")[1].toString();
-       let connected = networks.match(/\*.*/g);
-       return connected;
-     },
+    _get_connected_networks: function() {
+        let networks =  GLib.spawn_command_line_sync("netctl list")[1].toString();
+        let connected = networks.match(/\*.*/g);
+        return connected;
+    },
 
-     _stop_all: function() {
-	this._execute_async("gksudo /usr/bin/netctl stop-all ");
-     },
+    _stop_all: function() {
+        this._execute_async("gksudo /usr/bin/netctl stop-all ");
+    },
 
-     _switch_to_profile: function(profileName) {
-	this._execute_async("gksudo /usr/bin/netctl switch-to " + profileName);
-     },
+    _switch_to_profile: function(profileName) {
+        this._execute_async("gksudo /usr/bin/netctl switch-to " + profileName);
+    },
 
-     _execute_async: function(command) {
-       try {
-	 let stdin = "";
-	 let [result, argv] = GLib.shell_parse_argv(command);
-	 let res = GLib.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, null, null);
-       } catch (e) {
-	 global.logError(e);
-       }
-     },
+    _execute_async: function(command) {
+        try {
+            let stdin = "";
+            let [result, argv] = GLib.shell_parse_argv(command);
+            let res = GLib.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, null, null);
+        }
+        catch (e) {
+            global.logError(e);
+        }
+    },
 
-     _update_menu: function() {
-	this.menu.removeAll();
+    _update_menu: function() {
+        this.menu.removeAll();
 
-	var profiles = this._get_network_profiles();
-	for(let i = 0; i < profiles.length; i++){
-	  this._add_profile_menu_item(profiles[i]);
-	}
-	this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-	this._add_stop_all_menu_item();
+        var profiles = this._get_network_profiles();
+        for(let i = 0; i < profiles.length; i++){
+            this._add_profile_menu_item(profiles[i]);
+        }
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        this._add_stop_all_menu_item();
+    },
 
-     },
+    _add_stop_all_menu_item: function() {
+        let menuItem = new PopupMenu.PopupMenuItem("stop-all");
+        this.menu.addMenuItem(menuItem);
 
-     _add_stop_all_menu_item: function() {
-	  let menuItem = new PopupMenu.PopupMenuItem("stop-all");
-	  this.menu.addMenuItem(menuItem);
+        menuItem.connect('activate', Lang.bind(this, function() {
+            this._stop_all();
+        }));
+    },
 
-	  menuItem.connect('activate', Lang.bind(this, function() {
-	    this._stop_all();
-	  }));
-     },
+    _add_profile_menu_item: function(profile) {
+        // The the profile is not active, add a click action to switch to it.
+        if(! profile.match(/\*.*/g)) {
+            let menuItem = new PopupMenu.PopupMenuItem(profile);
+            this.menu.addMenuItem(menuItem);
+            menuItem.connect('activate', Lang.bind(this, function() {
+                this._switch_to_profile(profile);
+            }));
+        }else {
+            this.menu.addMenuItem(new PopupMenu.PopupMenuItem(profile,  { reactive: false }));
+        }
+    },
 
-     _add_profile_menu_item: function(profile) {
-       // The the profile is not active, add a click action to switch to it.
-       if(! profile.match(/\*.*/g)) {
-	  let menuItem = new PopupMenu.PopupMenuItem(profile);
-	  this.menu.addMenuItem(menuItem);
-	  menuItem.connect('activate', Lang.bind(this, function() {
-	    this._switch_to_profile(profile);
-	  }));
-       }else {
-	 this.menu.addMenuItem(new PopupMenu.PopupMenuItem(profile,  { reactive: false }));
-       }
-     },
+    _set_icon: function(){
+        let icon_name = "";
+        if(this._get_connected_networks() == null){
+            icon_name = NETWORK_OFFLINE;
+        } else {
+            icon_name = NETWORK_CONNECTED;
+        }
 
-     _set_icon: function(){
-       let icon_name = "";
-       if(this._get_connected_networks() == null){
-	 icon_name = NETWORK_OFFLINE;
-       } else {
-	 icon_name = NETWORK_CONNECTED;
-       }
+        let statusIcon = new St.Icon({icon_name: icon_name, icon_size: 16 });
 
-       let statusIcon = new St.Icon({icon_name: icon_name, icon_size: 16 });
+        this.actor.get_children().forEach(function(c) {
+            c.destroy()
+        });
+        this.actor.add_actor(statusIcon);
+    },
 
-       this.actor.get_children().forEach(function(c) {
-	    c.destroy()
-       });
-       this.actor.add_actor(statusIcon);
-     },
-
-     _refresh_details: function() {
-       event = GLib.timeout_add_seconds(0, 5, Lang.bind(this, function () {
-		this._set_icon();
-		this._update_menu();
-		return true;
-	    }));
-     }
- }
+    _refresh_details: function() {
+        event = GLib.timeout_add_seconds(0, 5, Lang.bind(this, function () {
+            this._set_icon();
+            this._update_menu();
+            return true;
+        }));
+    }
+}
 
 
 function init() {
 }
 
 function enable() {
-  indicator = new Netctl();
-  Main.panel.addToStatusArea('netctl', indicator);
-  indicator._get_connected_networks();
+    indicator = new Netctl();
+    Main.panel.addToStatusArea('netctl', indicator);
+    indicator._get_connected_networks();
 }
 
 function disable() {
-  indicator.destroy();
-  Mainloop.source_remove(event);
-  indicator = null;
+    indicator.destroy();
+    Mainloop.source_remove(event);
+    indicator = null;
 }
