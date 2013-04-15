@@ -1,10 +1,13 @@
 {
-  "description": "For people preferring Netctl, this plugin display a network status icon in the status area, similar to that of Network Manager.",
+  "description": "Netctl Menu allows you to switch between netctl profiles using a menu in the notification area.",
   "name": "Netctl Menu",
   "shell-version": [
+    "3.2",
+    "3.4",
+    "3.6",
     "3.8"
   ],
-  "url": "",
+  "url": "https://github.com/tjaartvdwalt/netctl-gnome-shell-extension",
   "uuid": "netctl@tjaart.tjaart.co.za",
-  "version": 1
+  "version": 0.1
 }
