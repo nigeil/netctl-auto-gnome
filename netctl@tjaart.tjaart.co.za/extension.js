@@ -44,7 +44,7 @@ Netctl.prototype = {
     _init: function(){
         PanelMenu.SystemStatusButton.prototype._init.call(this, 'netctl');
         // We include the set_icon() and update_menu() becaust otherwise the
-        // icon will only appear after the timeout on refresh_details have passed
+        // icon will only appear after the timeout on refresh_details() have passed
         this._set_icon();
         this._update_menu();
         // Will keep on updating the status area icon and updating the menu every x seconds
@@ -73,9 +73,8 @@ Netctl.prototype = {
 
     _execute_async: function(command) {
         try {
-            let stdin = "";
             let [result, argv] = GLib.shell_parse_argv(command);
-            let res = GLib.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, null, null);
+            GLib.spawn_async(null, argv, null, GLib.SpawnFlags.SEARCH_PATH, null);
         }
         catch (e) {
             global.logError(e);
