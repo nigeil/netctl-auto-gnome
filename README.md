@@ -1,7 +1,6 @@
 # netctl-auto-gnome #
 This is a Gnome 3 shell extension for [netctl-auto](https://wiki.archlinux.org/index.php/Netctl), the network profile manager for Arch Linux.
 
-** Note **
 This extension was originally the work of Tjaart van der Walt (tjaartvdwalt, netctl-gnome-shell-extension). He has transferred this work to me in order to bring it up to current Gnome shell standards and provide netctl-auto support; I thank him for his past pains.
 
 ## Features ##
