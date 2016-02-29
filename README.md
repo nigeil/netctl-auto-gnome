@@ -11,7 +11,7 @@ This extension was originally the work of Tjaart van der Walt (tjaartvdwalt, net
 
 **Profile activated**
 
-![screenshot](https://github.com/nigeil/netctl-auto-gnome/blob/master/screenshots/netctl-auto-gnome-screenshot.jpg?raw=true)
+![screenshot](https://github.com/nigeil/netctl-auto-gnome/blob/master/screenshots/netctl-auto-gnome-screenshot.png?raw=true)
 
 ## Dependencies ##
 * netctl
