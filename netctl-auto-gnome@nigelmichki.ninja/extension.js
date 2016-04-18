@@ -42,8 +42,10 @@ const PopupMenu = imports.ui.popupMenu;
 
 
 //Names of icons for the activities bar
-const NETWORK_CONNECTED = 'network-wireless';
-const NETWORK_OFFLINE = 'network-offline';
+const NETWORK_CONNECTED = 'network-wireless-signal-excellent-symbolic';
+//const NETWORK_CONNECTED = 'network-wireless';
+const NETWORK_OFFLINE = 'network-wireless-offline-symbolic';
+//const NETWORK_OFFLINE = 'network-offline';
 
 const REFRESH_TIME = 3     //seconds
 
@@ -55,7 +57,7 @@ const NetctlSwitcher = new Lang.Class({
    _init: function(){
       this.parent(0.0, 'NetctlSwitcher');
 
-      this.icon = new St.Icon({icon_name: 'network-wireless', 
+      this.icon = new St.Icon({icon_name: 'network-wireless-acquiring-symbolic', 
          style_class: 'system-status-icon'});
       let box = new St.BoxLayout({vertical: false, 
          style_class: 'panel-status-menu-box'});
@@ -137,25 +139,17 @@ const NetctlSwitcher = new Lang.Class({
       }
    },
 
-
-   //TODO: update this to gnome 3.18 standards 
-   //Not working presently (2016-02-29)
    _set_icon: function(){
-      let icon_name = "";
       if(this._get_connected_networks() == null){
-         icon_name = NETWORK_OFFLINE;
+          this.icon.icon_name = NETWORK_OFFLINE;
       } else {
-         icon_name = NETWORK_CONNECTED;
+          this.icon.icon_name = NETWORK_CONNECTED;
       }
-
-      this.icon = new St.Icon({icon_name: icon_name,
-         style_class: 'system-status-icon'})
-
    },
 
    _refresh_details: function() {
       event = GLib.timeout_add_seconds(0, REFRESH_TIME, Lang.bind(this, function () {
-         //this._set_icon();
+         this._set_icon();
          this._update_menu();
          return true;
       }));
